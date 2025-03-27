@@ -4,7 +4,7 @@
   "description": "Fully extendable eslint plugin for JSON i18n translation files.",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint index.js formatter*.js src/ --fix",
+    "lint": "npx eslint index.js formatter*.js src/ --fix",
     "test": "npm run lint && jest --coverage"
   },
   "files": [
@@ -44,6 +44,9 @@
   "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=4.0.0"
   },
   "devDependencies": {
     "eslint": "^4.15.0",
