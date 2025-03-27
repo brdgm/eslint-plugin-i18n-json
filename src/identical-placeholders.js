@@ -7,10 +7,12 @@ const deepForOwn = require('./util/deep-for-own');
 
 const sortAstNodes = (a, b) => `${a.type}${a.value}`.localeCompare(`${b.type}${b.value}`);
 
-const compareAst = (astA, astB) => {
+const compareAst = (astA, astB, ignoreTags) => {
   // Skip raw text
-  const astAFiltered = astA.filter(a => a.type !== TYPE.literal).sort(sortAstNodes);
-  const astBFiltered = astB.filter(a => a.type !== TYPE.literal).sort(sortAstNodes);
+  const astAFiltered = astA.filter(a => a.type !== TYPE.literal
+      && (!ignoreTags || a.type !== TYPE.tag)).sort(sortAstNodes);
+  const astBFiltered = astB.filter(a => a.type !== TYPE.literal
+      && (!ignoreTags || a.type !== TYPE.tag)).sort(sortAstNodes);
 
   if (astAFiltered.length !== astBFiltered.length) {
     return false;
@@ -39,12 +41,12 @@ const compareAst = (astA, astB) => {
       }
 
       return elementAOptions.every(o =>
-        compareAst(elementA.options[o].value, elementB.options[o].value));
+        compareAst(elementA.options[o].value, elementB.options[o].value, ignoreTags));
     }
 
     // Compare children for type 8 (rich text)
     if (elementA.type === TYPE.tag) {
-      return compareAst(elementA.children, elementB.children);
+      return compareAst(elementA.children, elementB.children, ignoreTags);
     }
 
     return true;
@@ -53,7 +55,7 @@ const compareAst = (astA, astB) => {
 
 const identicalPlaceholders = (context, source, sourceFilePath) => {
   const { options, settings } = context;
-  const { filePath } = options[0] || {};
+  const { filePath, ignoreTags } = options[0] || {};
 
   if (!filePath) {
     return [
@@ -104,7 +106,7 @@ const identicalPlaceholders = (context, source, sourceFilePath) => {
             // will be caught with the valid-message-syntax rule.
             return;
           }
-          if (!compareAst(referenceAst, sourceAst)) {
+          if (!compareAst(referenceAst, sourceAst, ignoreTags)) {
             invalidMessages.push({
               path,
               referenceTranslation,

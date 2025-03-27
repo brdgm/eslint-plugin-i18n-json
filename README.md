@@ -395,6 +395,7 @@ export default {
 - Can turn this rule on by specifying options for it through your `.eslintrc.*` file.
 - **options**
   - `filePath` : String (Required)
+  - `ignoreTags` : Boolean (Optional) - if set to true, HTML-like tags are ignored when doing the check
 
     - **Can be an absolute path to the reference translation file.**
       ```javascript
