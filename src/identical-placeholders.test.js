@@ -11,7 +11,8 @@ jest.mock(
     },
     noformat: {
       search: {
-        label2: 'Hi {user}'
+        label2: 'Hi {user}',
+        label3: 'Hi <b>{user}</b>'
       }
     },
     multipleVariables: 'Hi {user}, it is {today, date, medium}.',
@@ -113,6 +114,38 @@ ruleTester.run('identical-placeholders', rule, {
         },
         "multipleVariables": "It is {today, date, medium}, {user}.",
         "numberFormat": "{count, number} users"
+      }*//*path/to/file.json*/
+      `
+    },
+    // accept different placement of HTML tags
+    {
+      ...testCaseConfig,
+      code: `
+      /*{
+        "noformat": {
+          "search": {
+            "label3": "<b>Hi {user}</b>"
+          }
+        }
+      }*//*path/to/file.json*/
+      `
+    },
+    // accept different number of HTML tags with ignoring tags
+    {
+      options: [
+        {
+          filePath: 'path/to/reference-file.json',
+          ignoreTags: true
+        }
+      ],
+      filename: 'file.json',
+      code: `
+      /*{
+        "noformat": {
+          "search": {
+            "label3": "<b>Hi</b> <b>{user}</b>"
+          }
+        }
       }*//*path/to/file.json*/
       `
     }
