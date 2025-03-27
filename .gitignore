@@ -3,5 +3,6 @@ coverage/
 *.log
 .DS_Store
 .vscode
+package-lock.json
 *.lock
 /.idea
