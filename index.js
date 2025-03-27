@@ -3,6 +3,7 @@
 module.exports = {
   rules: {
     'valid-json': require('./src/valid-json'),
+    'valid-html-syntax': require('./src/valid-html-syntax'),
     'valid-message-syntax': require('./src/valid-message-syntax'),
     'identical-keys': require('./src/identical-keys'),
     'sorted-keys': require('./src/sorted-keys'),
