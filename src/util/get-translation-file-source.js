@@ -1,6 +1,6 @@
 const path = require('path');
 
-const isJSONFile = context => path.extname(context.getFilename()) === '.json';
+const isJSONFile = context => path.extname(context.filename || context.getFilename()) === '.json';
 
 const INVALID_SOURCE = {
   valid: false,
