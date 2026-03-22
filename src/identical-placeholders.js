@@ -7,12 +7,15 @@ const deepForOwn = require('./util/deep-for-own');
 
 const sortAstNodes = (a, b) => `${a.type}${a.value}`.localeCompare(`${b.type}${b.value}`);
 
+const flattenTags = (ast) => ast.flatMap(node =>
+  node.type === TYPE.tag ? flattenTags(node.children) : [node]);
+
 const compareAst = (astA, astB, ignoreTags) => {
-  // Skip raw text
-  const astAFiltered = astA.filter(a => a.type !== TYPE.literal
-      && (!ignoreTags || a.type !== TYPE.tag)).sort(sortAstNodes);
-  const astBFiltered = astB.filter(a => a.type !== TYPE.literal
-      && (!ignoreTags || a.type !== TYPE.tag)).sort(sortAstNodes);
+  // Skip raw text, flatten tags when ignoreTags so placeholders inside tags are still checked
+  const prepare = (ast) => (ignoreTags ? flattenTags(ast) : ast)
+    .filter(a => a.type !== TYPE.literal).sort(sortAstNodes);
+  const astAFiltered = prepare(astA);
+  const astBFiltered = prepare(astB);
 
   if (astAFiltered.length !== astBFiltered.length) {
     return false;

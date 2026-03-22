@@ -148,6 +148,21 @@ ruleTester.run('identical-placeholders', rule, {
         }
       }*//*path/to/file.json*/
       `
+    },
+    // accept placeholder moved outside tag with ignoring tags
+    {
+      options: [
+        {
+          filePath: 'path/to/reference-file.json',
+          ignoreTags: true
+        }
+      ],
+      filename: 'file.json',
+      code: `
+      /*{
+        "richText": "{price, number} <bold>this is the price</bold>."
+      }*//*path/to/file.json*/
+      `
     }
   ],
   invalid: [
@@ -239,6 +254,26 @@ ruleTester.run('identical-placeholders', rule, {
       code: `
       /*{
         "richText": "this is the price <bold>{price}</bold>."
+      }*//*path/to/file.json*/
+      `,
+      ...mismatchError
+    },
+    // errors on placeholder inside tag missing with ignoreTags
+    {
+      options: [
+        {
+          filePath: 'path/to/reference-file.json',
+          ignoreTags: true
+        }
+      ],
+      filename: 'file.json',
+      code: `
+      /*{
+        "noformat": {
+          "search": {
+            "label3": "<b>Hi</b>"
+          }
+        }
       }*//*path/to/file.json*/
       `,
       ...mismatchError
